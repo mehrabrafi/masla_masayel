@@ -79,25 +79,43 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                       color: Colors.transparent,
                       child: Column(
                         children: [
-                      ListTile(
-                      title: Text('প্রশ্ন: ${getFirstWords(q.question)}'),
-                      subtitle: Text('উত্তর: ${getFirstWords(q.answer)}'),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => QuestionDetailScreen(
-                              question: q.question,
-                              scholar: q.scholar,
-                              answer: q.answer,
-                            ),
+                          ListTile(
+                            title: Text('প্রশ্ন: ${getFirstWords(q.question)}'),
+                            subtitle: Text('উত্তর: ${getFirstWords(q.answer)}'),
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                PageRouteBuilder(
+                                  transitionDuration: Duration(milliseconds: 300),
+                                  pageBuilder: (_, __, ___) => QuestionDetailScreen(
+                                    question: q.question,
+                                    scholar: q.scholar,
+                                    answer: q.answer,
+                                  ),
+                                  transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                                    const begin = Offset(0.0, 0.5);
+                                    const end = Offset.zero;
+                                    const curve = Curves.easeInOut;
+
+                                    var tween = Tween(begin: begin, end: end).chain(
+                                      CurveTween(curve: curve),
+                                    );
+
+                                    return SlideTransition(
+                                      position: animation.drive(tween),
+                                      child: FadeTransition(
+                                        opacity: animation,
+                                        child: child,
+                                      ),
+                                    );
+                                  },
+                                ),
+                              );
+                            },
+                            splashColor: Colors.transparent,
+                            tileColor: Colors.transparent,
+                            selectedTileColor: Colors.transparent,
                           ),
-                        );
-                      },
-                      splashColor: Colors.transparent,
-                      tileColor: Colors.transparent,
-                      selectedTileColor: Colors.transparent,
-                    ),
                           Divider(
                             height: 1,
                             thickness: 1,
