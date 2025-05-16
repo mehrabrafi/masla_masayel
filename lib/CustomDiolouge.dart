@@ -248,7 +248,6 @@ class CustomDialog extends ConsumerWidget {
                 child: Column(
                   children: [
                     _buildThemeSwitch(context, ref, isDarkMode),
-                    const SizedBox(height: 8),
                     _buildDialogItem(
                       context,
                       Icons.info_outline,

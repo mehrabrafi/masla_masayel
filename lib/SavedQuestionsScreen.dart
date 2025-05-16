@@ -198,126 +198,149 @@ class _SavedScreenState extends ConsumerState<SavedScreen> {
               ? _formatTimestamp(bookmark['timestamp'])
               : '';
 
-          return Card(
-            margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            color: _selectedIndices.contains(index)
-                ? isDarkMode
-                ? Colors.teal[900]!.withOpacity(0.5)
-                : Colors.teal[50]
-                : isDarkMode
-                ? Colors.grey[850]
-                : Colors.white,
-            elevation: isDarkMode ? 0 : 2,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-              side: BorderSide(
-                color: isDarkMode ? Colors.grey[700]! : Colors.grey[200]!,
+          return AnimatedSwitcher(
+            duration: const Duration(milliseconds: 300),
+            child: Card(
+              key: ValueKey(bookmark['question']),
+              margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              color: _selectedIndices.contains(index)
+                  ? isDarkMode
+                  ? Colors.teal[900]!.withOpacity(0.5)
+                  : Colors.teal[50]
+                  : isDarkMode
+                  ? Colors.grey[850]
+                  : Colors.white,
+              elevation: isDarkMode ? 0 : 2,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+                side: BorderSide(
+                  color: isDarkMode ? Colors.grey[700]! : Colors.grey[200]!,
+                ),
               ),
-            ),
-            child: InkWell(
-              borderRadius: BorderRadius.circular(10),
-              onTap: () {
-                if (_isSelecting) {
-                  _toggleSelection(index);
-                } else {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => QuestionDetailScreen(
-                        question: bookmark['question']!,
-                        scholar: bookmark['scholar']!,
-                        answer: bookmark['answer']!,
-                      ),
-                    ),
-                  );
-                }
-              },
-              onLongPress: () {
-                setState(() {
-                  _isSelecting = true;
-                  _toggleSelection(index);
-                });
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        if (_isSelecting)
-                          Checkbox(
-                            value: _selectedIndices.contains(index),
-                            onChanged: (_) => _toggleSelection(index),
-                            fillColor: MaterialStateProperty.resolveWith(
-                                    (states) {
-                                  if (states.contains(MaterialState.selected)) {
-                                    return isDarkMode
-                                        ? Colors.teal[300]
-                                        : Colors.teal;
-                                  }
-                                  return null;
-                                }),
-                          ),
-                        Expanded(
-                          child: Text(
-                            'প্রশ্ন: ${_getFirstWords(bookmark['question']!)}',
-                            style: TextStyle(
-                              fontFamily: 'NotoSansBengali',
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                              color: isDarkMode
-                                  ? Colors.white
-                                  : Colors.black87,
-                              height: 1.4,
+              child: InkWell(
+                borderRadius: BorderRadius.circular(10),
+                onTap: () {
+                  if (_isSelecting) {
+                    _toggleSelection(index);
+                  } else {
+                    Navigator.push(
+                      context,
+                      PageRouteBuilder(
+                        transitionDuration: const Duration(milliseconds: 300),
+                        pageBuilder: (context, animation, secondaryAnimation) =>
+                            QuestionDetailScreen(
+                              question: bookmark['question']!,
+                              scholar: bookmark['scholar']!,
+                              answer: bookmark['answer']!,
                             ),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
+                        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                          const begin = Offset(0.0, 0.5);
+                          const end = Offset.zero;
+                          const curve = Curves.easeInOut;
+
+                          var tween = Tween(begin: begin, end: end).chain(
+                            CurveTween(curve: curve),
+                          );
+
+                          return SlideTransition(
+                            position: animation.drive(tween),
+                            child: FadeTransition(
+                              opacity: animation,
+                              child: child,
+                            ),
+                          );
+                        },
+                      ),
+                    );
+                  }
+                },
+                onLongPress: () {
+                  setState(() {
+                    _isSelecting = true;
+                    _toggleSelection(index);
+                  });
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          if (_isSelecting)
+                            Checkbox(
+                              value: _selectedIndices.contains(index),
+                              onChanged: (_) => _toggleSelection(index),
+                              fillColor: MaterialStateProperty.resolveWith(
+                                      (states) {
+                                    if (states.contains(MaterialState.selected)) {
+                                      return isDarkMode
+                                          ? Colors.teal[300]
+                                          : Colors.teal;
+                                    }
+                                    return null;
+                                  }),
+                            ),
+                          Expanded(
+                            child: Text(
+                              'প্রশ্ন: ${_getFirstWords(bookmark['question']!)}',
+                              style: TextStyle(
+                                fontFamily: 'NotoSansBengali',
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                color: isDarkMode
+                                    ? Colors.white
+                                    : Colors.black87,
+                                height: 1.4,
+                              ),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'উত্তর: ${_getFirstWords(bookmark['answer']!)}',
+                        style: TextStyle(
+                          fontFamily: 'NotoSansBengali',
+                          fontSize: 14,
+                          color: isDarkMode
+                              ? Colors.grey[400]
+                              : Colors.grey[700],
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      if (bookmark['scholar']!.isNotEmpty) ...[
+                        const SizedBox(height: 6),
+                        Text(
+                          '— ${bookmark['scholar']!}',
+                          style: TextStyle(
+                            fontFamily: 'NotoSansBengali',
+                            fontSize: 12,
+                            color: isDarkMode
+                                ? Colors.teal[300]
+                                : Colors.teal[700],
+                            fontStyle: FontStyle.italic,
                           ),
                         ),
                       ],
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'উত্তর: ${_getFirstWords(bookmark['answer']!)}',
-                      style: TextStyle(
-                        fontFamily: 'NotoSansBengali',
-                        fontSize: 14,
-                        color: isDarkMode
-                            ? Colors.grey[400]
-                            : Colors.grey[700],
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    if (bookmark['scholar']!.isNotEmpty) ...[
-                      const SizedBox(height: 6),
-                      Text(
-                        '— ${bookmark['scholar']!}',
-                        style: TextStyle(
-                          fontFamily: 'NotoSansBengali',
-                          fontSize: 12,
-                          color: isDarkMode
-                              ? Colors.teal[300]
-                              : Colors.teal[700],
-                          fontStyle: FontStyle.italic,
+                      if (timeText.isNotEmpty) ...[
+                        const SizedBox(height: 4),
+                        Text(
+                          '🕓 $timeText',
+                          style: TextStyle(
+                            fontFamily: 'NotoSansBengali',
+                            fontSize: 12,
+                            color: isDarkMode
+                                ? Colors.grey[400]
+                                : Colors.grey[600],
+                          ),
                         ),
-                      ),
+                      ],
                     ],
-                    if (timeText.isNotEmpty) ...[
-                      const SizedBox(height: 4),
-                      Text(
-                        '🕓 $timeText',
-                        style: TextStyle(
-                          fontFamily: 'NotoSansBengali',
-                          fontSize: 12,
-                          color: isDarkMode
-                              ? Colors.grey[400]
-                              : Colors.grey[600],
-                        ),
-                      ),
-                    ],
-                  ],
+                  ),
                 ),
               ),
             ),

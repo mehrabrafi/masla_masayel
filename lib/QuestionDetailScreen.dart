@@ -21,7 +21,7 @@ class QuestionDetailScreen extends ConsumerStatefulWidget {
 
 class _QuestionDetailScreenState extends ConsumerState<QuestionDetailScreen> {
   double _textScaleFactor = 1.0;
-  bool _showJoinButton = true;  // নতুন স্টেট
+  bool _showJoinButton = true;
 
   Future<void> _launchTelegram() async {
     final url = 'https://t.me/masla_masayel';
@@ -120,25 +120,23 @@ class _QuestionDetailScreenState extends ConsumerState<QuestionDetailScreen> {
                                 fontFamily: 'NotoSansBengali',
                               ),
                             ),
-                          const SizedBox(height: 60), // নিচে কিছু স্পেস রাখলাম যেন আইকনের সাথে overlap না হয়
+                          const SizedBox(height: 60),
                         ],
                       ),
                     ),
                   ),
                 ],
               ),
-
-              // Positioned Telegram Icon Button on Right Center, এখন _showJoinButton দিয়ে কন্ট্রোল
               if (_showJoinButton)
                 Positioned(
-                  right: -1, // ডান দিক থেকে ভিতরে ঢুকানো
+                  right: -1,
                   top: constraints.maxHeight / 2 - 25,
                   child: GestureDetector(
                     onTap: _launchTelegram,
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 8),
                       decoration: BoxDecoration(
-                        color: Colors.teal, // Telegram Blue
+                        color: Colors.teal,
                         borderRadius: BorderRadius.circular(5),
                         boxShadow: [
                           BoxShadow(
