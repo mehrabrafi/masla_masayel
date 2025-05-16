@@ -21,6 +21,7 @@ class QuestionDetailScreen extends ConsumerStatefulWidget {
 
 class _QuestionDetailScreenState extends ConsumerState<QuestionDetailScreen> {
   double _textScaleFactor = 1.0;
+  bool _showJoinButton = true;  // নতুন স্টেট
 
   Future<void> _launchTelegram() async {
     final url = 'https://t.me/masla_masayel';
@@ -127,43 +128,56 @@ class _QuestionDetailScreenState extends ConsumerState<QuestionDetailScreen> {
                 ],
               ),
 
-              // Positioned Telegram Icon Button on Right Center
-              Positioned(
-                right: -1, // ডান দিক থেকে ভিতরে ঢুকানো
-                top: constraints.maxHeight / 2 - 25,
-                child: GestureDetector(
-                  onTap: _launchTelegram,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                    decoration: BoxDecoration(
-                      color: Colors.teal, // Telegram Blue
-                      borderRadius: BorderRadius.circular(5),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
-                          blurRadius: 6,
-                          offset: Offset(0, 2),
-                        ),
-                      ],
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: const [
-                        Icon(Icons.telegram, color: Colors.white, size: 20),
-                        SizedBox(width: 6),
-                        Text(
-                          'Join',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
+              // Positioned Telegram Icon Button on Right Center, এখন _showJoinButton দিয়ে কন্ট্রোল
+              if (_showJoinButton)
+                Positioned(
+                  right: -1, // ডান দিক থেকে ভিতরে ঢুকানো
+                  top: constraints.maxHeight / 2 - 25,
+                  child: GestureDetector(
+                    onTap: _launchTelegram,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 8),
+                      decoration: BoxDecoration(
+                        color: Colors.teal, // Telegram Blue
+                        borderRadius: BorderRadius.circular(5),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.2),
+                            blurRadius: 6,
+                            offset: Offset(0, 2),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(Icons.telegram, color: Colors.white, size: 20),
+                          const SizedBox(width: 6),
+                          const Text(
+                            'Join',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _showJoinButton = false;
+                              });
+                            },
+                            child: const Icon(
+                              Icons.close,
+                              size: 18,
+                              color: Colors.white70,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              )
-,
             ],
           );
         },
