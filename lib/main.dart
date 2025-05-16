@@ -1,9 +1,9 @@
 import 'package:alemer_jobab/providers.dart';
+import 'package:alemer_jobab/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timeago/timeago.dart' as timeago;
-import 'HomeScreen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -11,6 +11,7 @@ void main() async {
   timeago.setLocaleMessages('bn', timeago.BnMessages());
 
   await Firebase.initializeApp();
+
   runApp(
     ProviderScope(
       child: MyApp(),
@@ -19,6 +20,8 @@ void main() async {
 }
 
 class MyApp extends ConsumerWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(themeProvider);
@@ -50,7 +53,7 @@ class MyApp extends ConsumerWidget {
         ),
       ),
       themeMode: themeMode == AppThemeMode.light ? ThemeMode.light : ThemeMode.dark,
-      home: HomeScreen(),
+      home: const SplashScreen(), // Start with splash screen
     );
   }
 }

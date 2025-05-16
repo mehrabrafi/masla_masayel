@@ -7,7 +7,7 @@ import 'CategoryQuestionsScreen.dart';
 import 'CustomDiolouge.dart';
 import 'SavedQuestionsScreen.dart';
 import 'providers.dart';
-import 'ui.dart';
+import 'card.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   @override

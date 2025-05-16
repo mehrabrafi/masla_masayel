@@ -1,5 +1,5 @@
 import 'package:alemer_jobab/providers.dart';
-import 'package:alemer_jobab/ui.dart';
+import 'package:alemer_jobab/card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

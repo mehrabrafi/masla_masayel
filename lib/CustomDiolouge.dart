@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'AboutUs.dart';
+import 'Aboutme.dart';
 import 'providers.dart';
 
 class CustomDialog extends ConsumerWidget {
@@ -43,14 +45,14 @@ class CustomDialog extends ConsumerWidget {
   }
 
   Widget _buildDialogItem(
-      BuildContext context, IconData icon, String text, bool isDarkMode) {
+      BuildContext context, IconData icon, String text, bool isDarkMode, {VoidCallback? onTap}) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       child: Material(
         color: Colors.transparent,
         child: InkWell(
           borderRadius: BorderRadius.circular(12),
-          onTap: () {
+          onTap: onTap ?? () {
             Navigator.pop(context);
           },
           splashColor: Colors.teal.withOpacity(0.2),
@@ -248,13 +250,44 @@ class CustomDialog extends ConsumerWidget {
                     _buildThemeSwitch(context, ref, isDarkMode),
                     const SizedBox(height: 8),
                     _buildDialogItem(
-                        context, Icons.info_outline, 'আমাদের সম্পর্কে', isDarkMode),
+                      context,
+                      Icons.info_outline,
+                      'App সম্পর্কে',
+                      isDarkMode,
+                      onTap: () {
+                        Navigator.pop(context);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const AboutUsScreen()),
+                        );
+                      },
+                    ),                    _buildDialogItem(
+                      context,
+                      Icons.people_outline,
+                      'App নির্মাতা',
+                      isDarkMode,
+                      onTap: () {
+                        Navigator.pop(context);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const AboutMe()),
+                        );
+                      },
+                    ),
                     const SizedBox(height: 8),
                     _buildDialogItem(
-                        context, Icons.star_outline, 'রেটিং দিন', isDarkMode),
+                      context,
+                      Icons.star_outline,
+                      'রেটিং দিন',
+                      isDarkMode,
+                    ),
                     const SizedBox(height: 8),
                     _buildDialogItem(
-                        context, Icons.share_outlined, 'শেয়ার করুন', isDarkMode),
+                      context,
+                      Icons.share_outlined,
+                      'শেয়ার করুন',
+                      isDarkMode,
+                    ),
                   ],
                 ),
               ),
