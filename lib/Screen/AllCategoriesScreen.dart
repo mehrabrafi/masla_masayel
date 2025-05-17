@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'providers.dart';
-import 'card.dart';
+import '../State/providers.dart';
+import '../UiComponents/card.dart';
 import 'CategoryQuestionsScreen.dart';
 
 class AllCategoriesScreen extends ConsumerWidget {
@@ -35,14 +35,24 @@ class AllCategoriesScreen extends ConsumerWidget {
                 title: category.title,
                 imageUrl: category.imageUrl,
                 color: Colors.teal,
-                textColor: Colors.white,
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => CategoryQuestionsScreen(
-                        category: category.title,
-                      ),
+                  Navigator.of(context).push(
+                    PageRouteBuilder(
+                      transitionDuration: Duration(milliseconds: 500),
+                      pageBuilder: (_, __, ___) => CategoryQuestionsScreen(category: category.title),
+                      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                        const begin = Offset(0.0, 1.0); // Starts from bottom
+                        const end = Offset.zero;
+                        const curve = Curves.easeInOut;
+
+                        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                        var offsetAnimation = animation.drive(tween);
+
+                        return SlideTransition(
+                          position: offsetAnimation,
+                          child: child,
+                        );
+                      },
                     ),
                   );
                 },

@@ -1,13 +1,13 @@
-import 'package:alemer_jobab/search_screen.dart';
+import 'package:alemer_jobab/Screen/search_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'AllCategoriesScreen.dart';
 import 'AllQuestionsScreen.dart';
 import 'CategoryQuestionsScreen.dart';
-import 'CustomDiolouge.dart';
+import '../UiComponents/CustomDiolouge.dart';
 import 'SavedQuestionsScreen.dart';
-import 'providers.dart';
-import 'card.dart';
+import '../State/providers.dart';
+import '../UiComponents/card.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   @override
@@ -18,10 +18,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with SingleTickerProvid
   int _selectedIndex = 0;
   late AnimationController _controller;
 
+  // Screens list - only contains home content
   final List<Widget> _screens = [
     HomeContent(),
-    Container(),
-    SavedScreen(),
+    Container(), // Placeholder (not used)
+    Container(), // Placeholder (not used)
   ];
 
   @override
@@ -39,17 +40,52 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with SingleTickerProvid
     super.dispose();
   }
 
+  Route _createBottomToTopRoute(Widget page) {
+    return PageRouteBuilder(
+      transitionDuration: Duration(milliseconds: 500),
+      pageBuilder: (context, animation, secondaryAnimation) => page,
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(0.0, 1.0);
+        const end = Offset.zero;
+        const curve = Curves.easeInOut;
+
+        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+        var offsetAnimation = animation.drive(tween);
+
+        return SlideTransition(
+          position: offsetAnimation,
+          child: child,
+        );
+      },
+    );
+  }
+
   void _onItemTapped(int index) {
+    if (index == 0) {
+      // Home - just update index, no navigation
+      setState(() {
+        _selectedIndex = 0;
+      });
+      return;
+    }
+
     setState(() {
       _selectedIndex = index;
     });
 
     if (index == 1) {
+      // Search screen
       _controller.forward(from: 0.0);
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (_) => SearchScreen()),
-      ).then((_) {
+      Navigator.of(context).push(_createBottomToTopRoute(SearchScreen()))
+          .then((_) {
+        setState(() {
+          _selectedIndex = 0;
+        });
+      });
+    } else if (index == 2) {
+      // Saved screen
+      Navigator.of(context).push(_createBottomToTopRoute(SavedScreen()))
+          .then((_) {
         setState(() {
           _selectedIndex = 0;
         });
@@ -60,9 +96,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with SingleTickerProvid
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _selectedIndex == 2 ? null : AppBar(
+      appBar: _selectedIndex == 0 ? AppBar(
         backgroundColor: Colors.teal,
-        title: Text('মাসলা-মাসায়েল', style: TextStyle(color: Colors.white)),
+        title: Text('ইসলামিক Query', style: TextStyle(color: Colors.white)),
         centerTitle: true,
         actions: [
           IconButton(
@@ -70,8 +106,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with SingleTickerProvid
             onPressed: () => CustomDialog.show(context, ref),
           ),
         ],
-      ),
-      body: _screens[_selectedIndex],
+      ) : null,
+      body: _selectedIndex == 0 ? _screens[0] : Container(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
         onPressed: () => _onItemTapped(1),
@@ -112,9 +148,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with SingleTickerProvid
       ),
     );
   }
-}
-
-class HomeContent extends ConsumerWidget {
+}class HomeContent extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final featuredCategories = ref.watch(featuredCategoriesProvider);
@@ -140,7 +174,27 @@ class HomeContent extends ConsumerWidget {
             children: [
               Text('বিষয়ভিত্তিক বিভাগ', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               TextButton(
-                onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => AllCategoriesScreen())),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    PageRouteBuilder(
+                      transitionDuration: Duration(milliseconds: 500),
+                      pageBuilder: (_, __, ___) => AllCategoriesScreen(),
+                      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                        const begin = Offset(0.0, 1.0);
+                        const end = Offset.zero;
+                        const curve = Curves.easeInOut;
+
+                        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                        var offsetAnimation = animation.drive(tween);
+
+                        return SlideTransition(
+                          position: offsetAnimation,
+                          child: child,
+                        );
+                      },
+                    ),
+                  );
+                },
                 child: Text('সব দেখুন', style: TextStyle(color: Theme.of(context).primaryColor)),
               )],
           ),
@@ -152,14 +206,31 @@ class HomeContent extends ConsumerWidget {
               children: [
                 SizedBox(width: 4),
                 ...featuredCategories.map((cat) => CategoryCard(
-                  title: cat.title,
-                  imageUrl: cat.imageUrl,
-                  color: Colors.teal,
-                  onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => CategoryQuestionsScreen(category: cat.title)),
-                  ),
-                )),
+      title: cat.title,  // Changed from category.title to cat.title
+      imageUrl: cat.imageUrl,  // Changed from category.imageUrl to cat.imageUrl
+      color: Colors.teal,
+      onTap: () {
+        Navigator.of(context).push(
+          PageRouteBuilder(
+            transitionDuration: Duration(milliseconds: 500),
+            pageBuilder: (_, __, ___) => CategoryQuestionsScreen(category: cat.title), // Changed from category.title to cat.title
+            transitionsBuilder: (context, animation, secondaryAnimation, child) {
+              const begin = Offset(0.0, 1.0); // Starts from bottom
+              const end = Offset.zero;
+              const curve = Curves.easeInOut;
+
+              var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+              var offsetAnimation = animation.drive(tween);
+
+              return SlideTransition(
+                position: offsetAnimation,
+                child: child,
+              );
+            },
+          ),
+        );
+      },
+    )),
                 SizedBox(width: 4),
               ],
             ),
@@ -170,7 +241,27 @@ class HomeContent extends ConsumerWidget {
             children: [
               Text('প্রশ্নসমূহ', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               TextButton(
-                onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => AllQuestionsScreen())),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    PageRouteBuilder(
+                      transitionDuration: Duration(milliseconds: 500),
+                      pageBuilder: (_, __, ___) => AllQuestionsScreen(),
+                      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                        const begin = Offset(0.0, 1.0);
+                        const end = Offset.zero;
+                        const curve = Curves.easeInOut;
+
+                        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                        var offsetAnimation = animation.drive(tween);
+
+                        return SlideTransition(
+                          position: offsetAnimation,
+                          child: child,
+                        );
+                      },
+                    ),
+                  );
+                },
                 child: Text('সব দেখুন', style: TextStyle(color: Theme.of(context).primaryColor)),
               )],
           ),

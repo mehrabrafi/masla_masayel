@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'providers.dart';
-import 'card.dart';
+import '../State/providers.dart';
+import '../UiComponents/card.dart';
 
 class CategoryQuestionsScreen extends ConsumerWidget {
   final String category;

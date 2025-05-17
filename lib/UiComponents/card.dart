@@ -2,7 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
-import 'QuestionDetailScreen.dart';
+import '../Screen/CategoryQuestionsScreen.dart';
+import '../Screen/QuestionDetailScreen.dart';
 
 class QuestionCard extends StatelessWidget {
   final String question;
@@ -138,12 +139,13 @@ class QuestionCard extends StatelessWidget {
   final Color? textColor;
 
   const CategoryCard({
+    Key? key,
     required this.title,
     required this.imageUrl,
     required this.color,
     required this.onTap,
     this.textColor,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -153,8 +155,8 @@ class QuestionCard extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(10),
-      splashColor: Colors.transparent, // Disables splash effect
-      highlightColor: Colors.transparent, // Disables highlight effect
+      splashColor: Colors.transparent,
+      highlightColor: Colors.transparent,
       child: Container(
         width: 110,
         margin: EdgeInsets.symmetric(horizontal: 6),

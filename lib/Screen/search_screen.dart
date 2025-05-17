@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'Models/DataModels.dart';
-import 'providers.dart';
+import '../Models/DataModels.dart';
+import '../State/providers.dart';
 import 'QuestionDetailScreen.dart';
 import 'dart:math';
 

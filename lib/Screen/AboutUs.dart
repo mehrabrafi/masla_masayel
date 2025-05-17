@@ -24,20 +24,8 @@ class AboutUsScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Center(
-              child: Column(
-                children: [
-                  Image.asset(
-                    'assets/logo1.png',
-                    height: 120,
-                    color: isDarkMode ? Colors.white : null,
-                  ),
-                  const SizedBox(height: 20),
-                ],
-              ),
-            ),
             Text(
-              'মাসলা মাসায়েল একটি নির্ভরযোগ্য ও গবেষণাভিত্তিক ইসলামী অ্যাপ, যেখানে আপনি প্রতিদিনকার জীবনে প্রয়োজনীয় গুরুত্বপূর্ণ ধর্মীয় প্রশ্নের নির্ভরযোগ্য উত্তর পাবেন কুরআন ও সহিহ হাদীসের আলোকে।',
+              '"ইসলামিক Query" একটি নির্ভরযোগ্য ও গবেষণাভিত্তিক ইসলামী অ্যাপ, যেখানে আপনি প্রতিদিনকার জীবনে প্রয়োজনীয় গুরুত্বপূর্ণ ধর্মীয় প্রশ্নের নির্ভরযোগ্য উত্তর পাবেন কুরআন ও সহিহ হাদীসের আলোকে।',
               style: TextStyle(
                 fontSize: 16,
                 height: 1.6,

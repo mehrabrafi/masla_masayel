@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'providers.dart';
+import '../State/providers.dart';
 
 class QuestionDetailScreen extends ConsumerStatefulWidget {
   final String question;
@@ -24,7 +24,7 @@ class _QuestionDetailScreenState extends ConsumerState<QuestionDetailScreen> {
   bool _showJoinButton = true;
 
   Future<void> _launchTelegram() async {
-    final url = 'https://t.me/masla_masayel';
+    final url = 'https://t.me/IslamicQuery';
     if (await canLaunchUrl(Uri.parse(url))) {
       await launchUrl(Uri.parse(url));
     }

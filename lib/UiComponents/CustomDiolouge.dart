@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'AboutUs.dart';
-import 'Aboutme.dart';
-import 'providers.dart';
+import '../Screen/AboutUs.dart';
+import '../Screen/Aboutme.dart';
+import '../State/providers.dart';
 
 class CustomDialog extends ConsumerWidget {
   const CustomDialog({super.key});

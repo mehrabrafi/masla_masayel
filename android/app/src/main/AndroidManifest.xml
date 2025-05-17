@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-permission android:name="android.permission.INTERNET" />
     <application
-        android:label="মাসলা-মাসায়েল"
+        android:label="ইসলামিক Query"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
