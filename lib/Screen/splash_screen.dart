@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../OnboardingScreen.dart';
+
+import 'package:alemer_jobab/Screen/onboardingScreen.dart';
 import 'HomeScreen.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
